@@ -1,6 +1,6 @@
 {
   "displayName": "Homebridge SwitchBot",
-  "name": "@homebridge-switchbot-async",
+  "name": "homebridge-switchbot-async",
   "version": "2.2.2",
   "description": "The [Homebridge](https://homebridge.io) SwitchBot plugin allows you to access your [SwitchBot](https://www.switch-bot.com) device(s) from HomeKit.",
   "author": "SwitchBot <support@wondertechlabs.com> (https://github.com/SwitchBot)",
