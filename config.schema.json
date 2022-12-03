@@ -1,0 +1,1101 @@
+{
+  "pluginAlias": "SwitchBot",
+  "pluginType": "platform",
+  "singular": true,
+  "customUi": true,
+  "headerDisplay": "<p align='center'><img width='100px' src='https://user-images.githubusercontent.com/9875439/102681754-ac2eb800-4189-11eb-8e17-7c47c804484b.png'></p>\n\nThe **SwitchBot** plugin allows you to control SwitchBot Devices. \n\nTo get started link your SwitchBot account.\n\n1. Download SwitchBot App on App Store or Google Play Store.\n\n2. Register a SwitchBot account and log in into your account.\n\n3. Generate an Open Token within the App.\n\n4. Input your `Open Token` into the paramter below.",
+  "footerDisplay": "Please raise any issues on our [project page](https://github.com/OpenWonderLabs/homebridge-switchbot/issues).\n\nIf you would like to have other SwitchBot Devices added to this plugin fill out [Feature Request Form](https://github.com/OpenWonderLabs/homebridge-switchbot/issues/new?assignees=&labels=&template=feature_request.md).\n\n[SwitchBot Website](https://www.switch-bot.com)",
+  "schema": {
+    "type": "object",
+    "properties": {
+      "name": {
+        "type": "string",
+        "title": "Name",
+        "default": "SwitchBot"
+      },
+      "credentials": {
+        "type": "object",
+        "properties": {
+          "token": {
+            "title": "Token",
+            "type": "string",
+            "x-schema-form": {
+              "type": "password"
+            }
+          },
+          "secret": {
+            "title": "Secret",
+            "type": "string",
+            "x-schema-form": {
+              "type": "password"
+            }
+          },
+          "notice": {
+            "title": "Notice",
+            "type": "string",
+            "default": "Keep your Token & Secret a secret!"
+          }
+        },
+        "required": ["token", "secret", "notice"]
+      },
+      "options": {
+        "type": "object",
+        "properties": {
+          "devices": {
+            "type": "array",
+            "items": {
+              "title": "Devices",
+              "type": "object",
+              "properties": {
+                "deviceId": {
+                  "title": "Device ID",
+                  "type": "string",
+                  "placeholder": "81F3UT59513F"
+                },
+                "configDeviceName": {
+                  "title": "Device Name",
+                  "type": "string",
+                  "placeholder": "SwitchBot",
+                  "condition": {
+                    "functionBody": "return (model.options && model.options.devices && model.options.devices[arrayIndices].deviceId);"
+                  }
+                },
+                "hide_device": {
+                  "title": "Hide Device",
+                  "type": "boolean",
+                  "description": "If true, device will be removed or hidden from HomeKit.",
+                  "condition": {
+                    "functionBody": "return (model.options && model.options.devices && model.options.devices[arrayIndices].deviceId);"
+                  }
+                },
+                "configDeviceType": {
+                  "title": "Device Type",
+                  "type": "string",
+                  "oneOf": [
+                    {
+                      "title": "Bot",
+                      "enum": ["Bot"]
+                    },
+                    {
+                      "title": "Curtain",
+                      "enum": ["Curtain"]
+                    },
+                    {
+                      "title": "Plug",
+                      "enum": ["Plug"]
+                    },
+                    {
+                      "title": "Meter",
+                      "enum": ["Meter"]
+                    },
+                    {
+                      "title": "Motion Sensor",
+                      "enum": ["Motion Sensor"]
+                    },
+                    {
+                      "title": "Contact Sensor",
+                      "enum": ["Contact Sensor"]
+                    },
+                    {
+                      "title": "Color Bulb",
+                      "enum": ["Color Bulb"]
+                    },
+                    {
+                      "title": "Humidifier",
+                      "enum": ["Humidifier"]
+                    },
+                    {
+                      "title": "Smart Fan",
+                      "enum": ["Smart Fan"]
+                    },
+                    {
+                      "title": "Smart Lock",
+                      "enum": ["Smart Lock"]
+                    },
+                    {
+                      "title": "Strip Light",
+                      "enum": ["Strip Light"]
+                    },
+                    {
+                      "title": "Meter Plus (US)",
+                      "enum": ["MeterPlus"]
+                    },
+                    {
+                      "title": "Meter Plus (JP)",
+                      "enum": ["Meter Plus (JP)"]
+                    },
+                    {
+                      "title": "Plug Mini (US)",
+                      "enum": ["Plug Mini (US)"]
+                    },
+                    {
+                      "title": "Plug Mini (JP)",
+                      "enum": ["Plug Mini (JP)"]
+                    }
+                  ],
+                  "condition": {
+                    "functionBody": "return (model.options && model.options.devices && model.options.devices[arrayIndices].deviceId && !model.options.devices[arrayIndices].hide_device);"
+                  }
+                },
+                "connectionType": {
+                  "title": "Connection Type",
+                  "type": "string",
+                  "oneOf": [
+                    {
+                      "title": "BLE/OpenAPI",
+                      "enum": ["BLE/OpenAPI"]
+                    },
+                    {
+                      "title": "OpenAPI",
+                      "enum": ["OpenAPI"]
+                    },
+                    {
+                      "title": "BLE",
+                      "enum": ["BLE"]
+                    },
+                    {
+                      "title": "Disable",
+                      "enum": ["Disabled"]
+                    }
+                  ],
+                  "description": "Bluetooth (BLE) API is only available for the following Device Types: Humidifier, Meter, MeterPlus, Curtain, Bot, Motion Sensor, Contact Sensor, Plug Mini (US), Plug Mini (JP), & Color Bulb",
+                  "condition": {
+                    "functionBody": "return (model.options && model.options.devices && model.options.devices[arrayIndices].deviceId && !model.options.devices[arrayIndices].hide_device);"
+                  }
+                },
+                "customBLEaddress": {
+                  "title": "Custom BLE Address",
+                  "type": "string",
+                  "placeholder": "81F3UT59513F",
+                  "condition": {
+                    "functionBody": "return (model.options && model.options.devices && model.options.devices[arrayIndices].deviceId && !model.options.devices[arrayIndices].hide_device && (model.options.devices[arrayIndices].connectionType === 'BLE' || model.options.devices[arrayIndices].connectionType === 'BLE/OpenAPI'));"
+                  }
+                },
+                "scanDuration": {
+                  "title": "BLE Scan Duration (Default is 1 Second)",
+                  "type": "number",
+                  "placeholder": 1,
+                  "condition": {
+                    "functionBody": "return (model.options && model.options.devices && model.options.devices[arrayIndices].deviceId && !model.options.devices[arrayIndices].hide_device && (model.options.devices[arrayIndices].connectionType === 'BLE' || model.options.devices[arrayIndices].connectionType === 'BLE/OpenAPI'));"
+                  }
+                },
+                "bot": {
+                  "type": "object",
+                  "properties": {
+                    "mode": {
+                      "title": "Mode",
+                      "type": "string",
+                      "oneOf": [
+                        {
+                          "title": "Press",
+                          "enum": ["press"]
+                        },
+                        {
+                          "title": "Switch",
+                          "enum": ["switch"]
+                        }
+                      ],
+                      "condition": {
+                        "functionBody": "return (model.options && model.options.devices && !model.options.devices[arrayIndices].hide_device && model.options.devices[arrayIndices].configDeviceType === 'Bot' && model.options.devices[arrayIndices].deviceId);"
+                      }
+                    },
+                    "deviceType": {
+                      "title": "What Type of Device do you want to display in the Home App?",
+                      "type": "string",
+                      "oneOf": [
+                        {
+                          "title": "Outlet",
+                          "enum": ["outlet"]
+                        },
+                        {
+                          "title": "Garage Door",
+                          "enum": ["garagedoor"]
+                        },
+                        {
+                          "title": "Door",
+                          "enum": ["door"]
+                        },
+                        {
+                          "title": "Lock",
+                          "enum": ["lock"]
+                        },
+                        {
+                          "title": "Faucet",
+                          "enum": ["faucet"]
+                        },
+                        {
+                          "title": "Fan",
+                          "enum": ["fan"]
+                        },
+                        {
+                          "title": "Window",
+                          "enum": ["window"]
+                        },
+                        {
+                          "title": "Window Covering",
+                          "enum": ["windowcovering"]
+                        },
+                        {
+                          "title": "Stateful Programmable Switch (Only Works in 3rd Party Home Apps)",
+                          "enum": ["stateful"]
+                        },
+                        {
+                          "title": "Switch",
+                          "enum": ["switch"]
+                        }
+                      ],
+                      "placeholder": "outlet",
+                      "condition": {
+                        "functionBody": "return (model.options && model.options.devices && !model.options.devices[arrayIndices].hide_device && model.options.devices[arrayIndices].configDeviceType === 'Bot' && model.options.devices[arrayIndices].deviceId && model.options.devices[arrayIndices].bot && model.options.devices[arrayIndices].bot.mode);"
+                      }
+                    },
+                    "allowPush": {
+                      "title": "Allow Changes to Be Pushed",
+                      "description": "If set to true, this will allow commands to be sent even if device state is already in state that is being pushed.",
+                      "type": "boolean",
+                      "condition": {
+                        "functionBody": "return (model.options && model.options.devices && !model.options.devices[arrayIndices].hide_device && model.options.devices[arrayIndices].configDeviceType === 'Bot' && model.options.devices[arrayIndices].deviceId && model.options.devices[arrayIndices].bot && model.options.devices[arrayIndices].bot.mode);"
+                      }
+                    },
+                    "doublePress": {
+                      "title": "How many presses do you want to simulate?",
+                      "type": "number",
+                      "placeholder": "2",
+                      "condition": {
+                        "functionBody": "return (model.options && model.options.devices && !model.options.devices[arrayIndices].hide_device && model.options.devices[arrayIndices].configDeviceType === 'Bot' && model.options.devices[arrayIndices].deviceId && model.options.devices[arrayIndices].bot && model.options.devices[arrayIndices].bot.mode);"
+                      }
+                    },
+                    "pushRatePress": {
+                      "title": "Double Press Push Rate",
+                      "type": "number",
+                      "placeholder": "15",
+                      "description": "Indicates the number of seconds between pushes for double presses to SwitchBot API",
+                      "condition": {
+                        "functionBody": "return (model.options && model.options.devices && !model.options.devices[arrayIndices].hide_device && model.options.devices[arrayIndices].configDeviceType === 'Bot' && model.options.devices[arrayIndices].deviceId && model.options.devices[arrayIndices].bot && model.options.devices[arrayIndices].bot.mode && model.options.devices[arrayIndices].bot.doublePress > 1);"
+                      }
+                    },
+                    "maxRetry": {
+                      "title": "Max Retries",
+                      "type": "number",
+                      "placeholder": "5",
+                      "condition": {
+                        "functionBody": "return (model.options && model.options.devices && !model.options.devices[arrayIndices].hide_device && model.options.devices[arrayIndices].configDeviceType === 'Bot' && model.options.devices[arrayIndices].deviceId && model.options.devices[arrayIndices].bot && model.options.devices[arrayIndices].bot.mode);"
+                      }
+                    }
+                  }
+                },
+                "meter": {
+                  "type": "object",
+                  "properties": {
+                    "hide_temperature": {
+                      "title": "Hide Meter's Temperature Sensor",
+                      "type": "boolean",
+                      "condition": {
+                        "functionBody": "return (model.options && model.options.devices && !model.options.devices[arrayIndices].hide_device && (model.options.devices[arrayIndices].configDeviceType === 'Meter' || model.options.devices[arrayIndices].configDeviceType === 'MeterPlus') && model.options.devices[arrayIndices].deviceId);"
+                      }
+                    },
+                    "hide_humidity": {
+                      "title": "Hide Meter's Humidity Sensor",
+                      "type": "boolean",
+                      "condition": {
+                        "functionBody": "return (model.options && model.options.devices && !model.options.devices[arrayIndices].hide_device && (model.options.devices[arrayIndices].configDeviceType === 'Meter' || model.options.devices[arrayIndices].configDeviceType === 'MeterPlus') && model.options.devices[arrayIndices].deviceId);"
+                      }
+                    }
+                  }
+                },
+                "humidifier": {
+                  "type": "object",
+                  "properties": {
+                    "hide_temperature": {
+                      "title": "Hide Humidifier's Temperature Sensor",
+                      "type": "boolean",
+                      "condition": {
+                        "functionBody": "return (model.options && model.options.devices && !model.options.devices[arrayIndices].hide_device && model.options.devices[arrayIndices].configDeviceType === 'Humidifier' && model.options.devices[arrayIndices].deviceId);"
+                      }
+                    },
+                    "set_minStep": {
+                      "title": "Set Min Step",
+                      "type": "number",
+                      "placeholder": "1",
+                      "condition": {
+                        "functionBody": "return (model.options && model.options.devices && !model.options.devices[arrayIndices].hide_device && model.options.devices[arrayIndices].configDeviceType === 'Humidifier' && model.options.devices[arrayIndices].deviceId);"
+                      }
+                    }
+                  }
+                },
+                "curtain": {
+                  "type": "object",
+                  "properties": {
+                    "set_minStep": {
+                      "title": "Set Minimum Step",
+                      "type": "number",
+                      "placeholder": "1",
+                      "description": "Sets the minimum steps that curtain allows. So if set to 20, it would allow you to set the curtain state to 0, 20, 40, 60, 80, and 100",
+                      "condition": {
+                        "functionBody": "return (model.options && model.options.devices && !model.options.devices[arrayIndices].hide_device && model.options.devices[arrayIndices].configDeviceType === 'Curtain' && model.options.devices[arrayIndices].deviceId);"
+                      }
+                    },
+                    "set_min": {
+                      "title": "Set Minimum Open State",
+                      "type": "number",
+                      "placeholder": "0",
+                      "description": "Sets the minimum percentage before needed to set Curtain to Open",
+                      "condition": {
+                        "functionBody": "return (model.options && model.options.devices && !model.options.devices[arrayIndices].hide_device && model.options.devices[arrayIndices].configDeviceType === 'Curtain' && model.options.devices[arrayIndices].deviceId);"
+                      }
+                    },
+                    "set_max": {
+                      "title": "Set Maximum Close State",
+                      "type": "number",
+                      "placeholder": "100",
+                      "description": "Sets the maximum percentage before needing to set Curtain to Closed",
+                      "condition": {
+                        "functionBody": "return (model.options && model.options.devices && !model.options.devices[arrayIndices].hide_device && model.options.devices[arrayIndices].configDeviceType === 'Curtain' && model.options.devices[arrayIndices].deviceId);"
+                      }
+                    },
+                    "updateRate": {
+                      "title": "Curtain Update Rate",
+                      "type": "number",
+                      "minimum": 1,
+                      "placeholder": 5,
+                      "description": "Indicates the number of seconds before refreshing Curtain status while updating slide progress.",
+                      "condition": {
+                        "functionBody": "return (model.options && model.options.devices && !model.options.devices[arrayIndices].hide_device && model.options.devices[arrayIndices].configDeviceType === 'Curtain' && model.options.devices[arrayIndices].deviceId);"
+                      }
+                    },
+                    "disable_group": {
+                      "title": "Disable Grouping",
+                      "type": "boolean",
+                      "condition": {
+                        "functionBody": "return (model.options && model.options.devices && !model.options.devices[arrayIndices].hide_device && model.options.devices[arrayIndices].configDeviceType === 'Curtain' && model.options.devices[arrayIndices].deviceId);"
+                      }
+                    },
+                    "setOpenMode": {
+                      "title": "Curtain's Opening Mode",
+                      "type": "string",
+                      "oneOf": [
+                        {
+                          "title": "Performance Mode",
+                          "enum": ["0"]
+                        },
+                        {
+                          "title": "Silent Mode",
+                          "enum": ["1"]
+                        }
+                      ],
+                      "condition": {
+                        "functionBody": "return (model.options && model.options.devices && !model.options.devices[arrayIndices].hide_device && model.options.devices[arrayIndices].configDeviceType === 'Curtain' && model.options.devices[arrayIndices].deviceId);"
+                      }
+                    },
+                    "setCloseMode": {
+                      "title": "Curtain's Closing Mode",
+                      "type": "string",
+                      "oneOf": [
+                        {
+                          "title": "Performance Mode",
+                          "enum": ["0"]
+                        },
+                        {
+                          "title": "Silent Mode",
+                          "enum": ["1"]
+                        }
+                      ],
+                      "condition": {
+                        "functionBody": "return (model.options && model.options.devices && !model.options.devices[arrayIndices].hide_device && model.options.devices[arrayIndices].configDeviceType === 'Curtain' && model.options.devices[arrayIndices].deviceId);"
+                      }
+                    },
+                    "hide_lightsensor": {
+                      "title": "Hide Curtain's Light Sensor",
+                      "type": "boolean",
+                      "condition": {
+                        "functionBody": "return (model.options && model.options.devices && !model.options.devices[arrayIndices].hide_device && model.options.devices[arrayIndices].configDeviceType === 'Curtain' && model.options.devices[arrayIndices].deviceId);"
+                      }
+                    },
+                    "set_minlux": {
+                      "title": "Set Min Lux",
+                      "type": "number",
+                      "placeholder": "1",
+                      "condition": {
+                        "functionBody": "return (model.options && model.options.devices && !model.options.devices[arrayIndices].hide_device && model.options.devices[arrayIndices].configDeviceType === 'Curtain' && model.options.devices[arrayIndices].deviceId && !model.options.devices[arrayIndices].curtain.hide_lightsensor);"
+                      }
+                    },
+                    "set_maxlux": {
+                      "title": "Set Max Lux",
+                      "type": "number",
+                      "placeholder": "6001",
+                      "condition": {
+                        "functionBody": "return (model.options && model.options.devices && !model.options.devices[arrayIndices].hide_device && model.options.devices[arrayIndices].configDeviceType === 'Curtain' && model.options.devices[arrayIndices].deviceId && !model.options.devices[arrayIndices].curtain.hide_lightsensor);"
+                      }
+                    }
+                  }
+                },
+                "contact": {
+                  "type": "object",
+                  "properties": {
+                    "hide_lightsensor": {
+                      "title": "Hide Contact Sensor's Light Sensor",
+                      "type": "boolean",
+                      "condition": {
+                        "functionBody": "return (model.options && model.options.devices && !model.options.devices[arrayIndices].hide_device && model.options.devices[arrayIndices].configDeviceType === 'Contact Sensor' && model.options.devices[arrayIndices].deviceId);"
+                      }
+                    },
+                    "set_minlux": {
+                      "title": "Set Min Lux",
+                      "type": "number",
+                      "placeholder": "1",
+                      "condition": {
+                        "functionBody": "return (model.options && model.options.devices && !model.options.devices[arrayIndices].hide_device && model.options.devices[arrayIndices].configDeviceType === 'Contact Sensor' && model.options.devices[arrayIndices].deviceId && !model.options.devices[arrayIndices].contact.hide_lightsensor);"
+                      }
+                    },
+                    "set_maxlux": {
+                      "title": "Set Max Lux",
+                      "type": "number",
+                      "placeholder": "6001",
+                      "condition": {
+                        "functionBody": "return (model.options && model.options.devices && !model.options.devices[arrayIndices].hide_device && model.options.devices[arrayIndices].configDeviceType === 'Contact Sensor' && model.options.devices[arrayIndices].deviceId && !model.options.devices[arrayIndices].contact.hide_lightsensor);"
+                      }
+                    },
+                    "hide_motionsensor": {
+                      "title": "Hide Contact Sensor's Motion Sensor",
+                      "type": "boolean",
+                      "condition": {
+                        "functionBody": "return (model.options && model.options.devices && !model.options.devices[arrayIndices].hide_device && model.options.devices[arrayIndices].configDeviceType === 'Contact Sensor' && model.options.devices[arrayIndices].deviceId);"
+                      }
+                    }
+                  }
+                },
+                "motion": {
+                  "type": "object",
+                  "properties": {
+                    "hide_lightsensor": {
+                      "title": "Hide Motion Sensor's Light Sensor",
+                      "type": "boolean",
+                      "condition": {
+                        "functionBody": "return (model.options && model.options.devices && !model.options.devices[arrayIndices].hide_device && model.options.devices[arrayIndices].configDeviceType === 'Motion Sensor' && model.options.devices[arrayIndices].deviceId);"
+                      }
+                    },
+                    "set_minlux": {
+                      "title": "Set Min Lux",
+                      "type": "number",
+                      "placeholder": "1",
+                      "condition": {
+                        "functionBody": "return (model.options && model.options.devices && !model.options.devices[arrayIndices].hide_device && model.options.devices[arrayIndices].configDeviceType === 'Motion Sensor' && model.options.devices[arrayIndices].deviceId && !model.options.devices[arrayIndices].motion.hide_lightsensor);"
+                      }
+                    },
+                    "set_maxlux": {
+                      "title": "Set Max Lux",
+                      "type": "number",
+                      "placeholder": "6001",
+                      "condition": {
+                        "functionBody": "return (model.options && model.options.devices && !model.options.devices[arrayIndices].hide_device && model.options.devices[arrayIndices].configDeviceType === 'Motion Sensor' && model.options.devices[arrayIndices].deviceId && !model.options.devices[arrayIndices].motion.hide_lightsensor);"
+                      }
+                    }
+                  }
+                },
+                "colorbulb": {
+                  "type": "object",
+                  "properties": {
+                    "set_minStep": {
+                      "title": "Set Min Step",
+                      "type": "number",
+                      "placeholder": "1",
+                      "condition": {
+                        "functionBody": "return (model.options && model.options.devices && !model.options.devices[arrayIndices].hide_device && (model.options.devices[arrayIndices].configDeviceType === 'Color Bulb' || model.options.devices[arrayIndices].configDeviceType === 'Strip Light') && model.options.devices[arrayIndices].deviceId);"
+                      }
+                    },
+                    "adaptiveLightingShift": {
+                      "title": "Adaptive Lighting Shift",
+                      "type": "number",
+                      "placeholder": "-1",
+                      "description": "The mired for each Adaptive Lighting update will be increased by this value, making the light appear warmer. Set to -1 to remove Adaptive Lighting feature. Must be -1 or more.",
+                      "condition": {
+                        "functionBody": "return (model.options && model.options.devices && !model.options.devices[arrayIndices].hide_device && model.options.devices[arrayIndices].configDeviceType === 'Color Bulb' && model.options.devices[arrayIndices].deviceId);"
+                      }
+                    }
+                  }
+                },
+                "lock": {
+                  "type": "object",
+                  "properties": {
+                    "hide_contactsensor": {
+                      "title": "Hide Lock's Contact Sensor",
+                      "type": "boolean",
+                      "condition": {
+                        "functionBody": "return (model.options && model.options.devices && !model.options.devices[arrayIndices].hide_device && model.options.devices[arrayIndices].configDeviceType === 'Smart Lock' && model.options.devices[arrayIndices].deviceId);"
+                      }
+                    }
+                  }
+                },
+                "mqttURL": {
+                  "title": "MQTT URL",
+                  "type": "string",
+                  "placeholder": "192.168.7.1",
+                  "condition": {
+                    "functionBody": "return (model.options && model.options.devices && !model.options.devices[arrayIndices].hide_device && model.options.devices[arrayIndices].deviceId && (model.options.devices[arrayIndices].configDeviceType === 'Curtain' || model.options.devices[arrayIndices].configDeviceType === 'Meter' || model.options.devices[arrayIndices].configDeviceType === 'MeterPlus' || model.options.devices[arrayIndices].configDeviceType === 'Meter Plus (JP)'));"
+                  }
+                },
+                "mqttOptions": {
+                  "title": "MQTT Options",
+                  "type": "string",
+                  "condition": {
+                    "functionBody": "return (model.options && model.options.devices && !model.options.devices[arrayIndices].hide_device && model.options.devices[arrayIndices].deviceId && model.options.devices[arrayIndices].mqttURL && (model.options.devices[arrayIndices].configDeviceType === 'Curtain' || model.options.devices[arrayIndices].configDeviceType === 'Meter' || model.options.devices[arrayIndices].configDeviceType === 'MeterPlus' || model.options.devices[arrayIndices].configDeviceType === 'Meter Plus (JP)'));"
+                  }
+                },
+                "mqttPubOptions": {
+                  "title": "MQTT Pub Options",
+                  "type": "string",
+                  "condition": {
+                    "functionBody": "return (model.options && model.options.devices && !model.options.devices[arrayIndices].hide_device && model.options.devices[arrayIndices].deviceId && model.options.devices[arrayIndices].mqttURL && (model.options.devices[arrayIndices].configDeviceType === 'Curtain' || model.options.devices[arrayIndices].configDeviceType === 'Meter' || model.options.devices[arrayIndices].configDeviceType === 'MeterPlus' || model.options.devices[arrayIndices].configDeviceType === 'Meter Plus (JP)'));"
+                  }
+                },
+                "history": {
+                  "title": "EVE History",
+                  "type": "boolean",
+                  "condition": {
+                    "functionBody": "return (model.options && model.options.devices && !model.options.devices[arrayIndices].hide_device && model.options.devices[arrayIndices].deviceId && (model.options.devices[arrayIndices].configDeviceType === 'Curtain' || model.options.devices[arrayIndices].configDeviceType === 'Meter' || model.options.devices[arrayIndices].configDeviceType === 'MeterPlus' || model.options.devices[arrayIndices].configDeviceType === 'Meter Plus (JP)'));"
+                  }
+                },
+                "firmware": {
+                  "title": "Firmware Override",
+                  "type": "string",
+                  "placeholder": "1.2.8",
+                  "condition": {
+                    "functionBody": "return (model.options && model.options.devices && !model.options.devices[arrayIndices].hide_device && model.options.devices[arrayIndices].deviceId);"
+                  }
+                },
+                "refreshRate": {
+                  "title": "Device Refresh Rate",
+                  "type": "number",
+                  "placeholder": 360,
+                  "description": "Indicates the number of seconds between polls of SwitchBot API.",
+                  "condition": {
+                    "functionBody": "return (model.options && model.options.devices && model.options.devices[arrayIndices].deviceId && !model.options.devices[arrayIndices].hide_device && model.options.devices[arrayIndices].configDeviceType);"
+                  }
+                },
+                "offline": {
+                  "title": "Offline as Off",
+                  "type": "boolean",
+                  "condition": {
+                    "functionBody": "return (model.options && model.options.devices && model.options.devices[arrayIndices].deviceId && !model.options.devices[arrayIndices].hide_device);"
+                  }
+                },
+                "external": {
+                  "title": "External Accessory",
+                  "type": "boolean",
+                  "condition": {
+                    "functionBody": "return (model.options && model.options.devices && model.options.devices[arrayIndices].deviceId && !model.options.devices[arrayIndices].hide_device && model.options.devices[arrayIndices].configDeviceType);"
+                  }
+                },
+                "logging": {
+                  "title": "Device Logging Override Setting",
+                  "type": "string",
+                  "oneOf": [
+                    {
+                      "title": "Standard Logging",
+                      "enum": ["standard"]
+                    },
+                    {
+                      "title": "No Logging",
+                      "enum": ["none"]
+                    },
+                    {
+                      "title": "Debug Logging",
+                      "enum": ["debug"]
+                    }
+                  ],
+                  "condition": {
+                    "functionBody": "return (model.options && model.options.devices && model.options.devices[arrayIndices].deviceId && !model.options.devices[arrayIndices].hide_device && model.options.devices[arrayIndices].configDeviceType);"
+                  }
+                }
+              },
+              "required": ["deviceId", "configDeviceType", "configDeviceName", "connectionType", "logging"]
+            },
+            "uniqueItems": true
+          },
+          "irdevices": {
+            "type": "array",
+            "items": {
+              "title": "IR Devices",
+              "type": "object",
+              "properties": {
+                "deviceId": {
+                  "title": "Device ID",
+                  "type": "string",
+                  "placeholder": "81F3UT59513F"
+                },
+                "configDeviceName": {
+                  "title": "Device Name",
+                  "type": "string",
+                  "placeholder": "SwitchBot",
+                  "condition": {
+                    "functionBody": "return (model.options && model.options.irdevices && model.options.irdevices[arrayIndices].deviceId);"
+                  }
+                },
+                "hide_device": {
+                  "title": "Hide Device",
+                  "type": "boolean",
+                  "description": "If true, device will be removed or hidden from HomeKit.",
+                  "condition": {
+                    "functionBody": "return (model.options && model.options.irdevices && model.options.irdevices[arrayIndices].deviceId);"
+                  }
+                },
+                "configRemoteType": {
+                  "title": "Remote Type",
+                  "type": "string",
+                  "oneOf": [
+                    {
+                      "title": "Air Conditioner (IR)",
+                      "enum": ["Air Conditioner"]
+                    },
+                    {
+                      "title": "DIY Air Conditioner (IR)",
+                      "enum": ["DIY Air Conditioner"]
+                    },
+                    {
+                      "title": "TV (IR)",
+                      "enum": ["TV"]
+                    },
+                    {
+                      "title": "DIY TV (IR)",
+                      "enum": ["DIY TV"]
+                    },
+                    {
+                      "title": "Light (IR)",
+                      "enum": ["Light"]
+                    },
+                    {
+                      "title": "DIY Light (IR)",
+                      "enum": ["DIY Light"]
+                    },
+                    {
+                      "title": "IPTV (IR)",
+                      "enum": ["IPTV"]
+                    },
+                    {
+                      "title": "DIY IPTV (IR)",
+                      "enum": ["DIY IPTV"]
+                    },
+                    {
+                      "title": "Set Top Box (IR)",
+                      "enum": ["Set Top Box"]
+                    },
+                    {
+                      "title": "DIY Set Top Box (IR)",
+                      "enum": ["DIY Set Top Box"]
+                    },
+                    {
+                      "title": "DVD (IR)",
+                      "enum": ["DVD"]
+                    },
+                    {
+                      "title": "DIY DVD (IR)",
+                      "enum": ["DIY DVD"]
+                    },
+                    {
+                      "title": "Fan (IR)",
+                      "enum": ["Fan"]
+                    },
+                    {
+                      "title": "DIY Fan (IR)",
+                      "enum": ["DIY Fan"]
+                    },
+                    {
+                      "title": "Projector (IR)",
+                      "enum": ["Projector"]
+                    },
+                    {
+                      "title": "DIY Projector (IR)",
+                      "enum": ["DIY Projector"]
+                    },
+                    {
+                      "title": "Camera (IR)",
+                      "enum": ["Camera"]
+                    },
+                    {
+                      "title": "DIY Camera (IR)",
+                      "enum": ["DIY Camera"]
+                    },
+                    {
+                      "title": "Air Purifier (IR)",
+                      "enum": ["Air Purifier"]
+                    },
+                    {
+                      "title": "DIY Air Purifier (IR)",
+                      "enum": ["DIY Air Purifier"]
+                    },
+                    {
+                      "title": "Speaker (IR)",
+                      "enum": ["Speaker"]
+                    },
+                    {
+                      "title": "DIY Speaker (IR)",
+                      "enum": ["DIY Speaker"]
+                    },
+                    {
+                      "title": "Water Heater (IR)",
+                      "enum": ["Water Heater"]
+                    },
+                    {
+                      "title": "DIY Water Heater (IR)",
+                      "enum": ["DIY Water Heater"]
+                    },
+                    {
+                      "title": "Vacuum Cleaner (IR)",
+                      "enum": ["Vacuum Cleaner"]
+                    },
+                    {
+                      "title": "DIY Vacuum Cleaner (IR)",
+                      "enum": ["DIY Vacuum Cleaner"]
+                    },
+                    {
+                      "title": "Others (IR)",
+                      "enum": ["Others"]
+                    }
+                  ],
+                  "condition": {
+                    "functionBody": "return (model.options && model.options.irdevices && model.options.irdevices[arrayIndices].deviceId && !model.options.irdevices[arrayIndices].hide_device);"
+                  }
+                },
+                "connectionType": {
+                  "title": "Connection Type",
+                  "type": "string",
+                  "oneOf": [
+                    {
+                      "title": "OpenAPI",
+                      "enum": ["OpenAPI"]
+                    },
+                    {
+                      "title": "Disable",
+                      "enum": ["Disabled"]
+                    }
+                  ],
+                  "description": "Enables OpenAPI, if disabled will leave device in HomeKit and commands will not be sent to OpenAPI.",
+                  "condition": {
+                    "functionBody": "return (model.options && model.options.irdevices && model.options.irdevices[arrayIndices].deviceId && !model.options.irdevices[arrayIndices].hide_device && model.options.irdevices[arrayIndices].configRemoteType);"
+                  }
+                },
+                "customize": {
+                  "title": "Custom IR Commands",
+                  "type": "boolean",
+                  "description": "Enables Custom IR Commands",
+                  "condition": {
+                    "functionBody": "return (model.options && model.options.irdevices && model.options.irdevices[arrayIndices].deviceId && !model.options.irdevices[arrayIndices].hide_device  && model.options.irdevices[arrayIndices].configRemoteType);"
+                  }
+                },
+                "customOn": {
+                  "title": "Custom <em class='primary-text'> On </em> Command",
+                  "type": "string",
+                  "placeholder": "On",
+                  "condition": {
+                    "functionBody": "return (model.options && model.options.irdevices && model.options.irdevices[arrayIndices].deviceId && !model.options.irdevices[arrayIndices].hide_device && model.options.irdevices[arrayIndices].configRemoteType && model.options.irdevices[arrayIndices].customize);"
+                  }
+                },
+                "customOff": {
+                  "title": "Custom <em class='primary-text'> Off </em> Command",
+                  "type": "string",
+                  "placeholder": "Off",
+                  "condition": {
+                    "functionBody": "return (model.options && model.options.irdevices && model.options.irdevices[arrayIndices].deviceId && !model.options.irdevices[arrayIndices].hide_device && model.options.irdevices[arrayIndices].configRemoteType && model.options.irdevices[arrayIndices].customize);"
+                  }
+                },
+                "disablePushOn": {
+                  "title": "Disable Sending <em class='primary-text'> On </em> Command",
+                  "type": "boolean",
+                  "condition": {
+                    "functionBody": "return (model.options && model.options.irdevices && model.options.irdevices[arrayIndices].deviceId && !model.options.irdevices[arrayIndices].hide_device && model.options.irdevices[arrayIndices].configRemoteType);"
+                  }
+                },
+                "disablePushOff": {
+                  "title": "Disable Sending <em class='primary-text'> Off </em> Command",
+                  "type": "boolean",
+                  "condition": {
+                    "functionBody": "return (model.options && model.options.irdevices && model.options.irdevices[arrayIndices].deviceId && !model.options.irdevices[arrayIndices].hide_device && model.options.irdevices[arrayIndices].configRemoteType);"
+                  }
+                },
+                "irair": {
+                  "type": "object",
+                  "properties": {
+                    "hide_automode": {
+                      "title": "Hide Auto Mode on IR Air Conditioners",
+                      "type": "boolean",
+                      "condition": {
+                        "functionBody": "return (model.options && model.options.irdevices && !model.options.irdevices[arrayIndices].hide_device && (model.options.irdevices[arrayIndices].configRemoteType === 'Air Conditioner' || model.options.irdevices[arrayIndices].configRemoteType === 'DIY Air Conditioner') && model.options.irdevices[arrayIndices].deviceId);"
+                      }
+                    }
+                  }
+                },
+                "irfan": {
+                  "type": "object",
+                  "properties": {
+                    "swing_mode": {
+                      "title": "Enable Swing Mode",
+                      "type": "boolean",
+                      "condition": {
+                        "functionBody": "return (model.options && model.options.irdevices && !model.options.irdevices[arrayIndices].hide_device && (model.options.irdevices[arrayIndices].configRemoteType === 'Fan' || model.options.irdevices[arrayIndices].configRemoteType === 'DIY Fan') && model.options.irdevices[arrayIndices].deviceId);"
+                      }
+                    },
+                    "rotation_speed": {
+                      "title": "Enable Rotation Speed",
+                      "type": "boolean",
+                      "condition": {
+                        "functionBody": "return (model.options && model.options.irdevices && !model.options.irdevices[arrayIndices].hide_device && (model.options.irdevices[arrayIndices].configRemoteType === 'Fan' || model.options.irdevices[arrayIndices].configRemoteType === 'DIY Fan') && model.options.irdevices[arrayIndices].deviceId);"
+                      }
+                    },
+                    "set_minStep": {
+                      "title": "Set Min Step",
+                      "type": "number",
+                      "placeholder": "1",
+                      "condition": {
+                        "functionBody": "return (model.options && model.options.irdevices && !model.options.irdevices[arrayIndices].hide_device && (model.options.irdevices[arrayIndices].configRemoteType === 'Fan' || model.options.irdevices[arrayIndices].configRemoteType === 'DIY Fan') && model.options.irdevices[arrayIndices].deviceId && model.options.irdevices[arrayIndices].irfan  && !model.options.irdevices[arrayIndices].irfan.rotation_speed);"
+                      }
+                    },
+                    "set_min": {
+                      "title": "Set Min",
+                      "type": "number",
+                      "placeholder": "0",
+                      "condition": {
+                        "functionBody": "return (model.options && model.options.irdevices && !model.options.irdevices[arrayIndices].hide_device && (model.options.irdevices[arrayIndices].configRemoteType === 'Fan' || model.options.irdevices[arrayIndices].configRemoteType === 'DIY Fan') && model.options.irdevices[arrayIndices].deviceId && model.options.irdevices[arrayIndices].irfan  && !model.options.irdevices[arrayIndices].irfan.rotation_speed);"
+                      }
+                    },
+                    "set_max": {
+                      "title": "Set Max",
+                      "type": "number",
+                      "placeholder": "100",
+                      "condition": {
+                        "functionBody": "return (model.options && model.options.irdevices && !model.options.irdevices[arrayIndices].hide_device && (model.options.irdevices[arrayIndices].configRemoteType === 'Fan' || model.options.irdevices[arrayIndices].configRemoteType === 'DIY Fan') && model.options.irdevices[arrayIndices].deviceId && model.options.irdevices[arrayIndices].irfan  && !model.options.irdevices[arrayIndices].irfan.rotation_speed);"
+                      }
+                    }
+                  }
+                },
+                "other": {
+                  "type": "object",
+                  "properties": {
+                    "deviceType": {
+                      "title": "What Type of Device do you want to display in the Home App?",
+                      "type": "string",
+                      "oneOf": [
+                        {
+                          "title": "Fan",
+                          "enum": ["Fan"]
+                        }
+                      ],
+                      "condition": {
+                        "functionBody": "return (model.options && model.options.irdevices && !model.options.irdevices[arrayIndices].hide_device && model.options.irdevices[arrayIndices].configRemoteType === 'Others' && model.options.irdevices[arrayIndices].deviceId);"
+                      }
+                    }
+                  }
+                },
+                "firmware": {
+                  "title": "Firmware Override",
+                  "type": "string",
+                  "placeholder": "1.2.8",
+                  "condition": {
+                    "functionBody": "return (model.options && model.options.irdevices && model.options.irdevices[arrayIndices].deviceId && !model.options.irdevices[arrayIndices].hide_device && model.options.irdevices[arrayIndices].configRemoteType);"
+                  }
+                },
+                "external": {
+                  "title": "External Accessory",
+                  "type": "boolean",
+                  "condition": {
+                    "functionBody": "return (model.options && model.options.irdevices && model.options.irdevices[arrayIndices].deviceId && !model.options.irdevices[arrayIndices].hide_device && model.options.irdevices[arrayIndices].configRemoteType);"
+                  }
+                },
+                "logging": {
+                  "title": "Device Logging Override Setting",
+                  "type": "string",
+                  "oneOf": [
+                    {
+                      "title": "Standard Logging",
+                      "enum": ["standard"]
+                    },
+                    {
+                      "title": "No Logging",
+                      "enum": ["none"]
+                    },
+                    {
+                      "title": "Debug Logging",
+                      "enum": ["debug"]
+                    }
+                  ],
+                  "condition": {
+                    "functionBody": "return (model.options && model.options.irdevices && model.options.irdevices[arrayIndices].deviceId && !model.options.irdevices[arrayIndices].hide_device && model.options.irdevices[arrayIndices].configRemoteType);"
+                  }
+                }
+              },
+              "required": ["deviceId", "configRemoteType", "connectionType", "logging"]
+            },
+            "uniqueItems": true
+          },
+          "refreshRate": {
+            "title": "Refresh Rate",
+            "type": "number",
+            "placeholder": 360,
+            "description": "Indicates the number of seconds between polls of SwitchBot API."
+          },
+          "pushRate": {
+            "title": "Push Rate",
+            "type": "number",
+            "placeholder": 1,
+            "description": "Indicates the number of seconds between pushes to SwitchBot API."
+          },
+          "logging": {
+            "title": "Logging Setting",
+            "type": "string",
+            "oneOf": [
+              {
+                "title": "Standard Logging",
+                "enum": ["standard"]
+              },
+              {
+                "title": "No Logging",
+                "enum": ["none"]
+              },
+              {
+                "title": "Debug Logging",
+                "enum": ["debug"]
+              }
+            ]
+          }
+        }
+      }
+    },
+    "required": ["name", "logging"]
+  },
+  "layout": [
+    {
+      "type": "fieldset",
+      "title": "SwitchBot Account Info",
+      "expandable": true,
+      "expanded": false,
+      "items": ["credentials.token", "credentials.secret"]
+    },
+    {
+      "type": "fieldset",
+      "title": "SwitchBot Device Settings",
+      "expandable": true,
+      "expanded": false,
+      "items": [
+        {
+          "key": "options.devices",
+          "notitle": false,
+          "type": "tabarray",
+          "title": "{{ value.configDeviceName || value.deviceId || 'New SwitchBot Device' }}",
+          "expandable": true,
+          "expanded": false,
+          "orderable": false,
+          "items": [
+            "options.devices[].configDeviceName",
+            "options.devices[].deviceId",
+            "options.devices[].hide_device",
+            "options.devices[].configDeviceType",
+            "options.devices[].connectionType",
+            "options.devices[].scanDuration",
+            "options.devices[].bot.mode",
+            "options.devices[].bot.deviceType",
+            "options.devices[].bot.allowPush",
+            "options.devices[].bot.doublePress",
+            "options.devices[].bot.pushRatePress",
+            "options.devices[].bot.maxRetry",
+            "options.devices[].meter.hide_temperature",
+            "options.devices[].meter.hide_humidity",
+            "options.devices[].humidifier.set_minStep",
+            "options.devices[].humidifier.hide_temperature",
+            "options.devices[].curtain.set_minStep",
+            "options.devices[].curtain.set_min",
+            "options.devices[].curtain.set_max",
+            "options.devices[].curtain.setOpenMode",
+            "options.devices[].curtain.setCloseMode",
+            "options.devices[].curtain.updateRate",
+            "options.devices[].curtain.disable_group",
+            "options.devices[].curtain.hide_lightsensor",
+            "options.devices[].curtain.set_minlux",
+            "options.devices[].curtain.set_maxlux",
+            "options.devices[].contact.hide_lightsensor",
+            "options.devices[].contact.set_minlux",
+            "options.devices[].contact.set_maxlux",
+            "options.devices[].contact.hide_motionsensor",
+            "options.devices[].motion.hide_lightsensor",
+            "options.devices[].motion.set_minlux",
+            "options.devices[].motion.set_maxlux",
+            "options.devices[].colorbulb.set_minStep",
+            "options.devices[].colorbulb.adaptiveLightingShift",
+            "options.devices[].lock.hide_contactsensor",
+            "options.devices[].mqttURL",
+            "options.devices[].mqttOptions",
+            "options.devices[].mqttPubOptions",
+            "options.devices[].history",
+            "options.devices[].firmware",
+            "options.devices[].refreshRate",
+            "options.devices[].offline",
+            "options.devices[].external",
+            "options.devices[].logging"
+          ]
+        }
+      ]
+    },
+    {
+      "type": "fieldset",
+      "title": "IR Device Settings",
+      "expandable": true,
+      "expanded": false,
+      "items": [
+        {
+          "key": "options.irdevices",
+          "notitle": false,
+          "type": "tabarray",
+          "title": "{{ value.configDeviceName || value.deviceId || 'New IR Device' }}",
+          "expandable": true,
+          "expanded": false,
+          "orderable": false,
+          "items": [
+            "options.irdevices[].configDeviceName",
+            "options.irdevices[].deviceId",
+            "options.irdevices[].hide_device",
+            "options.irdevices[].configRemoteType",
+            "options.irdevices[].connectionType",
+            "options.irdevices[].other.deviceType",
+            "options.irdevices[].customize",
+            "options.irdevices[].customOn",
+            "options.irdevices[].customOff",
+            "options.irdevices[].disablePushOn",
+            "options.irdevices[].disablePushOff",
+            "options.irdevices[].irair.hide_automode",
+            "options.irdevices[].irfan.rotation_speed",
+            "options.irdevices[].irfan.swing_mode",
+            "options.irdevices[].irfan.set_minStep",
+            "options.irdevices[].irfan.set_min",
+            "options.irdevices[].irfan.set_max",
+            "options.irdevices[].firmware",
+            "options.irdevices[].external",
+            "options.irdevices[].logging"
+          ]
+        }
+      ]
+    },
+    {
+      "type": "fieldset",
+      "title": "Advanced Settings",
+      "expandable": true,
+      "expanded": false,
+      "items": [
+        {
+          "type": "help",
+          "helpvalue": "<h5>Refresh Rate</h5><em class='primary-text'>Refresh Rate indicates the number of seconds between polls of SwitchBot API.</em>"
+        },
+        {
+          "key": "options.refreshRate",
+          "notitle": true
+        },
+        {
+          "type": "help",
+          "helpvalue": "<h5>Push Rate</h5><em class='primary-text'>Push Rate indicates the number of seconds between pushes to SwitchBot API, Currently only for Curtains.</em>"
+        },
+        {
+          "key": "options.pushRate",
+          "notitle": true
+        },
+        "options.logging"
+      ]
+    }
+  ]
+}

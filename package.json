@@ -1,0 +1,85 @@
+{
+  "displayName": "Homebridge SwitchBot",
+  "name": "@homebridge-switchbot-async",
+  "version": "2.2.2",
+  "description": "The [Homebridge](https://homebridge.io) SwitchBot plugin allows you to access your [SwitchBot](https://www.switch-bot.com) device(s) from HomeKit.",
+  "author": "SwitchBot <support@wondertechlabs.com> (https://github.com/SwitchBot)",
+  "license": "ISC",
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/OpenWonderLabs/homebridge-switchbot.git"
+  },
+  "bugs": {
+    "url": "https://github.com/OpenWonderLabs/homebridge-switchbot/issues"
+  },
+  "engines": {
+    "homebridge": "^1.5.0",
+    "node": "^14.20.1 || ^16.18.0 || ^18.11.0"
+  },
+  "main": "dist/index.js",
+  "scripts": {
+    "check": "npm install && npm outdated",
+    "update": "ncu -u && npm update && npm install",
+    "lint": "eslint src/**.ts",
+    "watch": "npm run build && npm link && nodemon",
+    "build": "rimraf ./dist && tsc",
+    "prepublishOnly": "npm run lint && npm run build",
+    "postpublish": "npm run clean",
+    "clean": "rimraf ./dist",
+    "test": "eslint src/**.ts"
+  },
+  "funding": [
+    {
+      "type": "Paypal",
+      "url": "https://paypal.me/donavanbecker"
+    },
+    {
+      "type": "GitHub",
+      "url": "https://github.com/sponsors/donavanbecker"
+    }
+  ],
+  "publishConfig": {
+    "access": "public"
+  },
+  "keywords": [
+    "homebridge-plugin",
+    "switchbot",
+    "lock",
+    "humidifier",
+    "humidity",
+    "temperature",
+    "bot",
+    "curtains",
+    "windows",
+    "ble",
+    "ir"
+  ],
+  "dependencies": {
+    "@homebridge/plugin-ui-utils": "^0.0.19",
+    "fakegato-history": "^0.6.3",
+    "super-stringify": "^1.0.0",
+    "async-mqtt": "^2.6.3",
+    "crypto-js": "^4.1.1",
+    "rxjs": "^7.5.7"
+  },
+  "devDependencies": {
+    "@types/node": "^18.11.3",
+    "@types/crypto-js": "^4.1.1",
+    "@typescript-eslint/eslint-plugin": "^5.40.1",
+    "@typescript-eslint/parser": "^5.40.1",
+    "eslint": "^8.26.0",
+    "eslint-config-prettier": "8.5.0",
+    "eslint-plugin-prettier": "4.2.1",
+    "homebridge": "^1.5.0",
+    "nodemon": "^2.0.20",
+    "npm-check-updates": "^16.3.15",
+    "prettier": "2.7.1",
+    "rimraf": "^3.0.2",
+    "ts-node": "^10.9.1",
+    "typescript": "^4.8.4"
+  },
+  "optionalDependencies": {
+    "@abandonware/noble": "^1.9.2-15",
+    "node-switchbot": "^1.6.1"
+  }
+}
