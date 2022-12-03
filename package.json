@@ -7,10 +7,7 @@
   "license": "ISC",
   "repository": {
     "type": "git",
-    "url": "git://github.com/OpenWonderLabs/homebridge-switchbot.git"
-  },
-  "bugs": {
-    "url": "https://github.com/OpenWonderLabs/homebridge-switchbot/issues"
+    "url": "git://github.com/alvst/homebridge-switchbot-latest-async.git"
   },
   "engines": {
     "homebridge": "^1.5.0",
